@@ -7,9 +7,10 @@ test:
   before_script:
     - pip install pytest pytest-cov
     - pip install flask==1.1.2 jinja2==3.0.3 itsdangerous==2.0.1
+    - pip install werkzeug==1.0.1
   script:
     - cd app
     - pytest --cov=app tests/
-    - pip install werkzeug==1.0.1
+    
 
 
