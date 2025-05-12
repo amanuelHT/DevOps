@@ -10,3 +10,6 @@ test:
   script:
     - cd app
     - pytest --cov=app tests/
+    - pip install werkzeug==1.0.1
+
+
