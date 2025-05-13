@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flask-example
+  namespace: staging
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: flask-example
+  template:
+    metadata:
+      labels:
+        app: flask-example
+    spec:
+      containers:
+        - name: flask-example
+          image: registry.internal.uia.no/ikt206-g-25v-devops/group23/exam-ikt206/flask-example-staging:v1.0.0
+          ports:
+            - containerPort: 5000
+          securityContext:
+            runAsNonRoot: true
+            allowPrivilegeEscalation: false
+            seccompProfile:
+              type: RuntimeDefault
+            capabilities:
+              drop:
+                - ALL
+
