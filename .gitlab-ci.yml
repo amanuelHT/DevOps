@@ -35,7 +35,7 @@ build:
 # -------- DEPLOY PRODUCTION (MANUAL) --------
 deploy-production:
   stage: deploy
-  image: lachlanevenson/k8s-kubectl:v1.31.2
+  image: lachlanevenson/k8s-kubectl:v1.27.4
   before_script:
     - mkdir -p ~/.kube
     - echo "$KUBECONFIG_CONTENT" > ~/.kube/config
@@ -46,4 +46,5 @@ deploy-production:
   when: manual
   only:
     - main
+
 
