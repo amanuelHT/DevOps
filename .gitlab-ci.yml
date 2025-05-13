@@ -35,9 +35,10 @@ build:
 # -------- DEPLOY PRODUCTION (MANUAL) --------
 deploy-production:
   stage: deploy
-  image: bitnami/kubectl:latest
+  image: lachlanevenson/k8s-kubectl:v1.31.2
   before_script:
-    - export KUBECONFIG=$CI_PROJECT_DIR/kubeconfig
+    - mkdir -p ~/.kube
+    - echo "$KUBECONFIG_CONTENT" > ~/.kube/config
   script:
     - kubectl apply -f k8s/production/namespace.yaml
     - kubectl apply -f k8s/production/deployment.yaml
@@ -45,3 +46,4 @@ deploy-production:
   when: manual
   only:
     - main
+
