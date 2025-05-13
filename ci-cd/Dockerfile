@@ -8,7 +8,8 @@ COPY ci-cd/wheels/ ./wheels/
 RUN pip install --no-index --no-cache-dir --find-links=./wheels -r requirements.txt
 
 COPY app/ .
-RUN useradd -m flaskuser
-USER flaskuser
+RUN useradd -u 1001 -m flaskuser
+USER 1001
+
 
 CMD ["gunicorn", "--bind", "0.0.0.0:5000", "app:app"]
