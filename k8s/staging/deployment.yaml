@@ -26,4 +26,5 @@ spec:
             capabilities:
               drop:
                 - ALL
-
+      imagePullSecrets:
+        - name: gitlab-registry-auth
