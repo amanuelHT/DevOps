@@ -19,11 +19,17 @@ variables:
 
 build-image:
   stage: build
-  image: docker:20.10.16
-  services:
-    - docker:20.10.16-dind
-  before_script:
-    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+  image: gcr.io/kaniko-project/executor:latest
+  variables:
+    IMAGE_NAME: $CI_REGISTRY_IMAGE/flask-example-staging
+    DOCKERFILE_PATH: ci-cd/Dockerfile
   script:
-    - docker build -t $IMAGE_NAME -f ci-cd/Dockerfile .
-    - docker push $IMAGE_NAME
+    - |
+      /kaniko/executor \
+        --context $CI_PROJECT_DIR \
+        --dockerfile $DOCKERFILE_PATH \
+        --destination $IMAGE_NAME \
+        --insecure \
+        --skip-tls-verify \
+        --cache=false
+
