@@ -27,4 +27,5 @@ build:
         --context=$CI_PROJECT_DIR/ci-cd
         --dockerfile=$CI_PROJECT_DIR/ci-cd/Dockerfile
         --destination=$IMAGE_NAME
+        --build-arg=TIMEZONE=Europe/Oslo
         --verbosity=info
