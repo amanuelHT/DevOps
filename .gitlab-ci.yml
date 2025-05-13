@@ -3,7 +3,7 @@ stages:
   - build
 
 variables:
-  IMAGE_NAME: registry.internal.uia.no/ikt206-g-25v-devops/group23/exam-ikt206/flask-example-staging:v1.0.0
+  IMAGE_NAME: registry.internal.uia.no/ikt206-g-25v-devops/group23/exam-ikt206/flask-example-staging:v1.0.1
 
 # -------- TEST STAGE --------
 test:
