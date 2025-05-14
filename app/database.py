@@ -41,15 +41,17 @@ def list_users():
     return result
 
 def verify(id, pw):
-    _conn = sqlite3.connect(user_db_file_location)
+    _conn = get_connection(user_db_file_location)
     _c = _conn.cursor()
-
-    _c.execute("SELECT pw FROM users WHERE id = '" + id + "';")
-    result = _c.fetchone()[0] == hashlib.sha256(pw.encode()).hexdigest()
-    
+    placeholder = "%s" if IS_POSTGRES else "?"
+    _c.execute(f"SELECT pw FROM users WHERE id = {placeholder};", (id,))
+    row = _c.fetchone()
     _conn.close()
 
-    return result
+    if row:
+        return row[0] == hashlib.sha256(pw.encode()).hexdigest()
+    return False
+
 
 def delete_user_from_db(id):
     _conn = get_connection(user_db_file_location)
