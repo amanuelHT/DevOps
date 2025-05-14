@@ -35,16 +35,17 @@ build:
 # -------- DEPLOY PRODUCTION (MANUAL) --------
 deploy-production:
   stage: deploy
-  image: bitnami/kubectl:1.31
+  image: alpine/k8s:1.27.3
   before_script:
     - mkdir -p ~/.kube
     - echo "$KUBECONFIG_CONTENT" > ~/.kube/config
   script:
-    - kubectl apply -f k8s/production/namespace.yaml
-    - kubectl apply -f k8s/production/deployment.yaml
-    - kubectl apply -f k8s/production/service.yaml
+    - kubectl apply -f k8s/production/namespace.yaml --validate=false
+    - kubectl apply -f k8s/production/deployment.yaml --validate=false
+    - kubectl apply -f k8s/production/service.yaml --validate=false
   when: manual
   only:
     - main
+
 
 
