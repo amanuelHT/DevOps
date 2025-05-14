@@ -43,17 +43,17 @@ def list_users():
 def verify(id, pw):
     _conn = get_connection(user_db_file_location)
     _c = _conn.cursor()
+
     placeholder = "%s" if IS_POSTGRES else "?"
-    
     _c.execute(f"SELECT pw FROM users WHERE id = {placeholder};", (id,))
-    result = _c.fetchone()
+    db_pw = _c.fetchone()
 
     _conn.close()
-    
-    if result:
-        hashed_input = hashlib.sha256(pw.encode()).hexdigest()
-        return result[0] == hashed_input
+
+    if db_pw:
+        return db_pw[0] == hashlib.sha256(pw.encode()).hexdigest()
     return False
+
 
 
 
