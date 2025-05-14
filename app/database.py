@@ -82,6 +82,17 @@ def add_user(id, pw):
     _conn.close()
 
 
+def read_note_from_db(id):
+    _conn = get_connection(note_db_file_location)
+    _c = _conn.cursor()
+    placeholder = "%s" if IS_POSTGRES else "?"
+    _c.execute(f"SELECT note_id, timestamp, note FROM notes WHERE user = {placeholder};", (id.upper(),))
+    result = _c.fetchall()
+    _conn.close()
+    return result
+
+
+
 def delete_note_from_db(note_id):
     _conn = get_connection(note_db_file_location)
     _c = _conn.cursor()
