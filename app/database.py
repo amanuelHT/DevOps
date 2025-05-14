@@ -46,12 +46,12 @@ def verify(id, pw):
 
     placeholder = "%s" if IS_POSTGRES else "?"
     _c.execute(f"SELECT pw FROM users WHERE id = {placeholder};", (id,))
-    db_pw = _c.fetchone()
+    row = _c.fetchone()
 
     _conn.close()
 
-    if db_pw:
-        return db_pw[0] == hashlib.sha256(pw.encode()).hexdigest()
+    if row:
+        return row[0] == hashlib.sha256(pw.encode()).hexdigest()
     return False
 
 
