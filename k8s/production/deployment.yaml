@@ -35,6 +35,6 @@ spec:
               memory: "128Mi"
           env:
            - name: DATABASE_URL
-             value: postgresql://flaskuser:flaskpass@postgres-production-postgresql:5432/flaskdb
+             value: postgresql://flaskuser:Admin123@postgres-production-postgresql:5432/flaskdb
       imagePullSecrets:
         - name: gitlab-registry-auth
