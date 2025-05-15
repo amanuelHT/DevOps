@@ -29,10 +29,13 @@ def get_connection(db_file=None):
 def list_users():
     _conn = get_connection(user_db_file_location)
     _c = _conn.cursor()
+
     _c.execute("SELECT id FROM users;")
-    result = [x[0] for x in _c.fetchall()]
+    result = [x[0].upper() for x in _c.fetchall()]  # <<< ensure uppercase
+
     _conn.close()
     return result
+
 
 def verify(id, pw):
     _conn = get_connection(user_db_file_location)
