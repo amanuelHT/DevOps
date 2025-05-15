@@ -21,10 +21,11 @@ def get_connection(db_file=None):
             user=parsed.username,
             password=parsed.password,
             host=parsed.hostname,
-            port=parsed.port
+            port=int(parsed.port) if parsed.port else 5432  # fallback to default port
         )
     else:
         return sqlite3.connect(db_file)
+
 
 def list_users():
     _conn = get_connection(user_db_file_location)
