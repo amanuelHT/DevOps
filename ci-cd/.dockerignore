@@ -1,0 +1,4 @@
+# .dockerignore
+*.py
+tests/
+__pycache__/
