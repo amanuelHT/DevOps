@@ -1,0 +1,18 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: flask-staging
+  namespace: argocd
+spec:
+  destination:
+    namespace: staging
+    server: https://kubernetes.default.svc
+  project: default
+  source:
+    repoURL: https://gitlab.internal.uia.no/ikt206-g-25v-devops/group23/exam-ikt206.git
+    targetRevision: main
+    path: k8s/staging
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
