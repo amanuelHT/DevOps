@@ -8,6 +8,6 @@ spec:
   ports:
     - port: 5000
       targetPort: 5000
-      nodePort: 32700
+      nodePort: 32701
   selector:
     app: flask-example
