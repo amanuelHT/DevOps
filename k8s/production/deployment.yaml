@@ -13,14 +13,9 @@ spec:
       labels:
         app: flask-example
     spec:
-    template:
-    spec:
-      securityContext:
-        runAsUser: 1001
-        runAsNonRoot: true
       containers:
         - name: flask-example
-          image: registry.internal.uia.no/ikt206-g-25v-devops/group23/exam-ikt206/flask-example-staging:v1.0.4
+          image: registry.internal.uia.no/ikt206-g-25v-devops/group23/exam-ikt206/flask-example-staging:v1.0.5
           ports:
             - containerPort: 5000
           securityContext:
