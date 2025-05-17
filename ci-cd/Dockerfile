@@ -26,6 +26,7 @@ WORKDIR /app
 
 # 4. Copy in installed packages & compiled bytecode + static assets
 COPY --from=builder /usr/local/lib/python3.12/site-packages /usr/local/lib/python3.12/site-packages
+COPY --from=builder /usr/local/bin     /usr/local/bin
 COPY --from=builder /app/__pycache__   /app/__pycache__
 COPY --from=builder /app/static        /app/static
 COPY --from=builder /app/templates     /app/templates
