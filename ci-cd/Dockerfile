@@ -32,9 +32,10 @@ COPY --from=builder /src/static         /app/static
 COPY --from=builder /src/templates      /app/templates
 COPY --from=builder /src/image_pool     /app/image_pool
 
-RUN useradd -u 1001 -m flaskuser \
- && chown -R flaskuser:flaskuser /app
-USER 1001:1001
+# non-root user
+RUN useradd -u 1001 -m flaskuser && chown -R flaskuser:flaskuser /app
+USER 1001
+
 
 
 # 6) expose & run
