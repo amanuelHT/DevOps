@@ -1,13 +1,13 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: flask-example-service
+  name: flask-example
   namespace: staging
 spec:
+  type: NodePort
+  ports:
+    - port: 5000
+      targetPort: 5000
+      nodePort: 32700
   selector:
     app: flask-example
-  ports:
-    - protocol: TCP
-      port: 80
-      targetPort: 5000
-  type: NodePort  # or ClusterIP, depending on your cluster access

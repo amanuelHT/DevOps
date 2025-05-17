@@ -42,7 +42,7 @@ build:
         --destination="$PROD_IMAGE" \
         --verbosity=info
 
-# -------- DEPLOY TO STAGING (manual trigger) --------
+# -------- DEPLOY TO STAGING (manual) --------
 deploy-staging:
   stage: deploy-staging
   when: manual
@@ -61,7 +61,7 @@ deploy-staging:
   only:
     - main
 
-# -------- DEPLOY TO PRODUCTION (manual trigger) --------
+# -------- DEPLOY TO PRODUCTION (manual) --------
 deploy-production:
   stage: deploy-production
   when: manual
