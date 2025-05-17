@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: flask-example
-          image: registry.internal.uia.no/ikt206-g-25v-devops/group23/exam-ikt206/flask-example-staging:v1.0.8
+          image: registry.internal.uia.no/ikt206-g-25v-devops/group23/exam-ikt206/flask-example-staging:v1.0.9
           ports:
             - containerPort: 5000
           securityContext:
