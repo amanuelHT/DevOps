@@ -29,7 +29,7 @@ COPY --from=builder /app/image_pool    /app/image_pool
 
 # non-root user
 RUN useradd -u 1001 -m flaskuser
-USER flaskuser
+USER 1001
 
 # expose & run
 EXPOSE 5000
