@@ -40,9 +40,9 @@ build:
         --verbosity=info
 
 
-# -------- AUTO DEPLOY TO STAGING --------
 deploy-staging:
   stage: deploy-staging
+  when: manual         # ← require you to click “play” in the UI
   image: bitnami/kubectl:1.27
   before_script:
     - mkdir -p ~/.kube
@@ -58,10 +58,9 @@ deploy-staging:
   only:
     - main
 
-# -------- MANUAL DEPLOY TO PROD --------
 deploy-production:
   stage: deploy-production
-  when: manual
+  when: manual         # ← also manual
   image: bitnami/kubectl:1.27
   before_script:
     - mkdir -p ~/.kube
@@ -76,3 +75,4 @@ deploy-production:
     url: http://$PROD_HOST
   only:
     - main
+
