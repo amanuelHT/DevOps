@@ -3,6 +3,10 @@ kind: Deployment
 metadata:
   name: flask-example
   namespace: staging
+  annotations:
+    # Tell Image Updater which image(s) to track
+    argocd-image-updater.argoproj.io/image-list: |
+      flask-example=registry.internal.uia.no/ikt206-g-25v-devops/group23/exam-ikt206/flask-example-staging
 spec:
   replicas: 1
   selector:
