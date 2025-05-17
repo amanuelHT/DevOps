@@ -13,28 +13,29 @@ spec:
       labels:
         app: flask-example
     spec:
+      imagePullSecrets:
+        - name: gitlab-registry-auth
+      securityContext:
+        runAsNonRoot: true
       containers:
         - name: flask-example
-          image: registry.internal.uia.no/ikt206-g-25v-devops/group23/exam-ikt206/flask-example-staging:v1.2
+          image: IMAGE_PLACEHOLDER       # will be replaced by CI
+          imagePullPolicy: Always
           ports:
             - containerPort: 5000
           securityContext:
-            runAsNonRoot: true
             allowPrivilegeEscalation: false
             seccompProfile:
               type: RuntimeDefault
             capabilities:
-              drop:
-                - ALL
+              drop: ["ALL"]
           resources:
-            limits:
-              cpu: "500m"
-              memory: "256Mi"
             requests:
               cpu: "250m"
               memory: "128Mi"
+            limits:
+              cpu: "500m"
+              memory: "256Mi"
           env:
             - name: DATABASE_URL
               value: postgresql://postgres:p0BHJJoNqz@postgres-staging-postgresql:5432/flaskdb
-      imagePullSecrets:
-        - name: gitlab-registry-auth
