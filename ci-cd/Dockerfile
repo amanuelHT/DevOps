@@ -31,8 +31,9 @@ COPY --from=builder /app/image_pool /app/image_pool
 COPY --from=builder /app/database_file /app/database_file
 
 # 5. Non-root user
-RUN useradd -u1001 -m flaskuser && chown -R flaskuser:flaskuser /app
-USER flaskuser
+RUN useradd -u 1001 -m flaskuser
+USER 1001
+
 
 # 6. Expose & run Gunicorn on app:app
 EXPOSE 5000
