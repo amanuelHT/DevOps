@@ -1,10 +1,9 @@
 # ─── STAGE 1: BUILDER ───────────────────────────────────────────────
 FROM python:3.12-slim AS builder
+WORKDIR /src
 
-WORKDIR /app
-
-# 1. Copy & install wheels (offline) + requirements
-COPY ci-cd/wheels/    ./wheels/
+# 1) Install wheels & requirements (offline)
+COPY ci-cd/wheels/ wheels/
 COPY app/requirements.txt .
 RUN pip install \
       --no-index \
@@ -12,39 +11,35 @@ RUN pip install \
       --find-links=./wheels \
       -r requirements.txt
 
-# 2. Copy in source & compile to bytecode
-COPY app/ .
-RUN python -m compileall . \
-    && mkdir -p bytecode \
-    && mv __pycache__/*.pyc bytecode/ \
-    && rm -rf __pycache__ \
-    && find . -type f -name '*.py' -delete
+# 2) Copy source + wsgi entrypoint
+COPY app/     app/
+COPY wsgi.py  wsgi.py
+
+# 3) Compile everything to .pyc, then delete all .py
+RUN python -m compileall app wsgi.py \
+ && mkdir -p build/bytecode \
+ && find app wsgi.py -type f -name '*.pyc' -exec mv {} build/bytecode/ \; \
+ && find . -type f -name '*.py' -delete
 
 # ─── STAGE 2: RUNTIME ───────────────────────────────────────────────
 FROM python:3.12-slim
-
 WORKDIR /app
 
-# 3. Copy installed packages & executables
+# 4) Copy installed packages + executables
 COPY --from=builder /usr/local/lib/python3.12/site-packages /usr/local/lib/python3.12/site-packages
 COPY --from=builder /usr/local/bin /usr/local/bin
 
-# 4. Copy only compiled bytecode files
-COPY --from=builder /app/bytecode/app.cpython-312.pyc      /app/app.pyc
-COPY --from=builder /app/bytecode/config.cpython-312.pyc   /app/config.pyc
-COPY --from=builder /app/bytecode/database.cpython-312.pyc /app/database.pyc
-COPY --from=builder /app/bytecode/wsgi.cpython-312.pyc     /app/wsgi.pyc
+# 5) Copy bytecode & assets
+COPY --from=builder /src/build/bytecode    /app/
+COPY --from=builder /src/app/static        /app/static
+COPY --from=builder /src/app/templates     /app/templates
+COPY --from=builder /src/app/image_pool    /app/image_pool
 
-# 5. Copy static assets
-COPY --from=builder /app/static      /app/static
-COPY --from=builder /app/templates   /app/templates
-COPY --from=builder /app/image_pool  /app/image_pool
+# 6) Drop to non-root
+RUN useradd -u 1001 -m flaskuser \
+ && chown -R flaskuser:flaskuser /app
+USER flaskuser
 
-# 6. Non-root user
-RUN useradd -u 1001 -m flaskuser
-USER 1001
-
-
-# 7. Expose port & launch via Gunicorn
+# 7) Expose + launch Gunicorn against the compiled bytecode
 EXPOSE 5000
-CMD ["gunicorn", "--bind", "0.0.0.0:5000", "wsgi:app"]
+CMD ["gunicorn", "--bind", "0.0.0.0:5000", "app:app"]
