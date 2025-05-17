@@ -3,9 +3,6 @@ kind: Deployment
 metadata:
   name: flask-example
   namespace: production
-  annotations:
-    argocd-image-updater.argoproj.io/image-list: |
-      flask-example=registry.internal.uia.no/ikt206-g-25v-devops/group23/exam-ikt206/flask-example-production
 spec:
   replicas: 1
   selector:
@@ -22,7 +19,7 @@ spec:
         runAsNonRoot: true
       containers:
         - name: flask-example
-          image: registry.internal.uia.no/ikt206-g-25v-devops/group23/exam-ikt206/flask-example-production:$IMAGE_TAG 
+          image: IMAGE_PLACEHOLDER       # ← replaced by CI
           imagePullPolicy: Always
           ports:
             - containerPort: 5000
