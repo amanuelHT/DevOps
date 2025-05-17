@@ -28,21 +28,17 @@ build:
     name: gcr.io/kaniko-project/executor:debug
     entrypoint: [""]
   script:
-    # configure Kaniko auth
     - mkdir -p /kaniko/.docker
-    - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" \
+    - |
+      echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" \
         > /kaniko/.docker/config.json
-    # build and push two images (staging + prod)
-    - /kaniko/executor \
-        --context $CI_PROJECT_DIR \
-        --dockerfile $CI_PROJECT_DIR/ci-cd/Dockerfile \
-        --destination $STAGING_IMAGE \
-        --verbosity info
-    - /kaniko/executor \
-        --context $CI_PROJECT_DIR \
-        --dockerfile $CI_PROJECT_DIR/ci-cd/Dockerfile \
-        --destination $PROD_IMAGE \
-        --verbosity info
+    - |
+      /kaniko/executor \
+        --context="$CI_PROJECT_DIR" \
+        --dockerfile="$CI_PROJECT_DIR/ci-cd/Dockerfile" \
+        --destination="$IMAGE_NAME" \
+        --verbosity=info
+
 
 # -------- AUTO DEPLOY TO STAGING --------
 deploy-staging:
