@@ -6,7 +6,7 @@ stages:
 
 variables:
   # Always tag with your commit SHA so images are immutable
-  IMAGE_TAG: $CI_COMMIT_SHORT_SHA
+  IMAGE_TAG: v1.0.9
   STAGING_IMAGE: registry.internal.uia.no/ikt206-g-25v-devops/group23/exam-ikt206/flask-example-staging:$IMAGE_TAG
   PROD_IMAGE:    registry.internal.uia.no/ikt206-g-25v-devops/group23/exam-ikt206/flask-example-production:$IMAGE_TAG
 
