@@ -22,7 +22,7 @@ spec:
         runAsNonRoot: true
       containers:
         - name: flask-example
-          image: IMAGE_PLACEHOLDER       # ← replaced by CI
+          image: registry.internal.uia.no/ikt206-g-25v-devops/group23/exam-ikt206/flask-example-production:v1.2  
           imagePullPolicy: Always
           ports:
             - containerPort: 5000
