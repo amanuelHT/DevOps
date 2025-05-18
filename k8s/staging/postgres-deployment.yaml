@@ -32,13 +32,12 @@ spec:
               secretKeyRef:
                 name: db-credentials
                 key: database
-          # ← add this
           - name: PGDATA
             value: /var/lib/postgresql/data/pgdata
         volumeMounts:
-          - name: postgres-data
+          - name: postgres-data    # <- must match the volumes.name below
             mountPath: /var/lib/postgresql/data
       volumes:
-        - name: data
+        - name: postgres-data      # <- renamed to match the volumeMounts.name
           persistentVolumeClaim:
             claimName: postgres-staging-pvc
