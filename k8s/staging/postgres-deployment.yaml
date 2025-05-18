@@ -13,34 +13,31 @@ spec:
       labels:
         app: postgres-staging
     spec:
-      securityContext:
-        runAsNonRoot: true
-        runAsUser: 999       # non-root UID inside the image
       containers:
       - name: postgres
-        image: postgres:15
+        image: postgres:15-alpine
         ports:
         - containerPort: 5432
         env:
-        - name: POSTGRES_USER
-          valueFrom:
-            secretKeyRef:
-              name: db-credentials
-              key: username
-        - name: POSTGRES_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: db-credentials
-              key: password
-        - name: POSTGRES_DB
-          valueFrom:
-            secretKeyRef:
-              name: db-credentials
-              key: database
+          - name: POSTGRES_USER
+            valueFrom:
+              secretKeyRef:
+                name: db-credentials
+                key: username
+          - name: POSTGRES_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: db-credentials
+                key: password
+          - name: POSTGRES_DB
+            valueFrom:
+              secretKeyRef:
+                name: db-credentials
+                key: database
         volumeMounts:
-        - name: data
-          mountPath: /var/lib/postgresql/data
+          - name: data
+            mountPath: /var/lib/postgresql/data
       volumes:
-      - name: data
-        persistentVolumeClaim:
-          claimName: postgres-staging-pvc
+        - name: data
+          persistentVolumeClaim:
+            claimName: postgres-staging-pvc
