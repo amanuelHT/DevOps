@@ -12,39 +12,12 @@ spec:
     metadata:
       labels:
         app: postgres-staging
-    spec:
-      securityContext:
-        runAsNonRoot: true
-        runAsUser: 999
-        fsGroup: 999
-        seccompProfile:
-          type: RuntimeDefault
-
-      initContainers:
-        - name: init-clean
-          image: busybox
-          # Run as root so we can rm/chown
-          securityContext:
-            runAsUser: 0
-          command:
-            - sh
-            - -c
-            - |
-              echo "Cleaning /var/lib/postgresql/data…"
-              rm -rf /var/lib/postgresql/data/*
-          volumeMounts:
-            - name: postgres-storage
-              mountPath: /var/lib/postgresql/data
-
+    spec:                                       # ← Move spec here, not under labels
       containers:
         - name: postgres
           image: postgres:latest
           ports:
             - containerPort: 5432
-          securityContext:
-            allowPrivilegeEscalation: false
-            capabilities:
-              drop: ["ALL"]
           env:
             - name: POSTGRES_USER
               valueFrom:
@@ -61,11 +34,12 @@ spec:
                 secretKeyRef:
                   name: db-credentials
                   key: database
+            - name: PGDATA
+              value: /var/lib/postgresql/data/pgdata
           volumeMounts:
             - name: postgres-storage
               mountPath: /var/lib/postgresql/data
-
-      volumes:
+      volumes:                                  # ← Add your PVC here
         - name: postgres-storage
           persistentVolumeClaim:
             claimName: postgres-staging-pvc
