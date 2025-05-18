@@ -1,23 +1,9 @@
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: postgres-staging
-  namespace: staging
 spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: postgres-staging
   template:
-    metadata:
-      labels:
-        app: postgres-staging
     spec:
       containers:
       - name: postgres
-        image: postgres:15-alpine
-        ports:
-        - containerPort: 5432
+        image: postgres:latest
         env:
           - name: POSTGRES_USER
             valueFrom:
@@ -34,10 +20,9 @@ spec:
               secretKeyRef:
                 name: db-credentials
                 key: database
+          # ← add this
+          - name: PGDATA
+            value: /var/lib/postgresql/data/pgdata
         volumeMounts:
-          - name: data
+          - name: postgres-data
             mountPath: /var/lib/postgresql/data
-      volumes:
-        - name: data
-          persistentVolumeClaim:
-            claimName: postgres-staging-pvc
