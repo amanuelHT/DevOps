@@ -13,11 +13,13 @@ spec:
       labels:
         app: postgres-production
     spec:
-      # Pod-level securityContext to satisfy "restricted" PodSecurity
+      # Pod-level securityContext for restricted policy
       securityContext:
-        runAsNonRoot: true
+        runAsNonRoot: true           # Deny running as root
+        runAsUser: 1000              # Pick a non-root UID
+        fsGroup: 2000                # Ensure mounted volumes are writable
         seccompProfile:
-          type: RuntimeDefault
+          type: RuntimeDefault      # Use Docker’s default seccomp profile
 
       containers:
         - name: postgres
