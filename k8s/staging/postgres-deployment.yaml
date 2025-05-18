@@ -12,7 +12,10 @@ spec:
     metadata:
       labels:
         app: postgres-staging
-    spec:                                # ← Unindented to align under template
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        fsGroup: 999              # ← ensures the PVC mount is chowned to GID 999
       containers:
         - name: postgres
           image: postgres:latest
@@ -32,8 +35,6 @@ spec:
                 secretKeyRef:
                   name: db-credentials
                   key: database
-            - name: PGDATA
-              value: /var/lib/postgresql/data/pgdata
           volumeMounts:
             - name: postgres-storage
               mountPath: /var/lib/postgresql/data
