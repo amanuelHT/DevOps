@@ -4,7 +4,8 @@ metadata:
   name: postgres-staging-pvc
   namespace: production
 spec:
-  accessModes: [ReadWriteOnce]
+  accessModes:
+    - ReadWriteOnce
   resources:
     requests:
       storage: 1Gi
