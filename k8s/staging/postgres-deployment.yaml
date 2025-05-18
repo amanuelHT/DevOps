@@ -4,12 +4,7 @@ metadata:
   name: postgres-staging
   namespace: staging
 spec:
-  strategy:
-    type: RollingUpdate
-    rollingUpdate:
-      maxSurge: 0          # no extra pods
-      maxUnavailable: 1    # allow one pod down during update
-
+  replicas: 1
   selector:
     matchLabels:
       app: postgres-staging
@@ -54,8 +49,8 @@ spec:
                 secretKeyRef:
                   name: db-credentials
                   key: database
-           # - name: PGDATA
-            #  value: /var/lib/postgresql/data/pgdata
+            - name: PGDATA
+              value: /var/lib/postgresql/data/pgdata
 
           volumeMounts:
             - name: postgres-storage

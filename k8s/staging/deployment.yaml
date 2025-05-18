@@ -23,7 +23,7 @@ spec:
         runAsNonRoot: true
       containers:
         - name: flask-example
-          image: registry.internal.uia.no/ikt206-g-25v-devops/group23/exam-ikt206/flask-example-staging:v1.5
+          image: registry.internal.uia.no/ikt206-g-25v-devops/group23/exam-ikt206/flask-example-staging:v1.6
           imagePullPolicy: Always
           ports:
             - containerPort: 5000
