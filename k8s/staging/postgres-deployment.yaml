@@ -1,38 +1,34 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: postgres-staging
-  namespace: staging
+  name: postgres-production
+  namespace: production
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: postgres-staging
+      app: postgres-production
   template:
     metadata:
       labels:
-        app: postgres-staging
+        app: postgres-production
     spec:
-      # Pod-level securityContext for restricted PodSecurity
       securityContext:
         runAsNonRoot: true
-        runAsUser: 1000
-        fsGroup: 2000
+        runAsUser: 999
+        fsGroup: 999
         seccompProfile:
           type: RuntimeDefault
 
       containers:
         - name: postgres
-          image: postgres:latest
+          image: postgres:14-alpine
           ports:
             - containerPort: 5432
-
-          # Container-level securityContext
           securityContext:
             allowPrivilegeEscalation: false
             capabilities:
               drop: ["ALL"]
-
           env:
             - name: POSTGRES_USER
               valueFrom:
@@ -49,14 +45,13 @@ spec:
                 secretKeyRef:
                   name: db-credentials
                   key: database
-            - name: PGDATA
+            - name: PGDATA                  # Point postgres at the pgdata subfolder
               value: /var/lib/postgresql/data/pgdata
-
           volumeMounts:
-            - name: postgres-storage
-              mountPath: /var/lib/postgresql/data
+            - name: data
+              mountPath: /var/lib/postgresql/data/pgdata  # Mount the PVC here
 
       volumes:
-        - name: postgres-storage
+        - name: data
           persistentVolumeClaim:
-            claimName: postgres-staging-pvc
+            claimName: postgres-production-pvc

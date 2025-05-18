@@ -13,26 +13,22 @@ spec:
       labels:
         app: postgres-production
     spec:
-      # Pod-level securityContext for restricted policy
       securityContext:
-        runAsNonRoot: true           # Deny running as root
-        runAsUser: 1000              # Pick a non-root UID
-        fsGroup: 2000                # Ensure mounted volumes are writable
+        runAsNonRoot: true
+        runAsUser: 999
+        fsGroup: 999
         seccompProfile:
-          type: RuntimeDefault      # Use Docker’s default seccomp profile
+          type: RuntimeDefault
 
       containers:
         - name: postgres
           image: postgres:14-alpine
           ports:
             - containerPort: 5432
-
-          # Container-level securityContext
           securityContext:
             allowPrivilegeEscalation: false
             capabilities:
               drop: ["ALL"]
-
           env:
             - name: POSTGRES_USER
               valueFrom:
@@ -49,9 +45,7 @@ spec:
                 secretKeyRef:
                   name: db-credentials
                   key: database
-            - name: PGDATA
-              value: /var/lib/postgresql/data/pgdata
-
+          # Removed PGDATA override so default /var/lib/postgresql/data is used
           volumeMounts:
             - name: data
               mountPath: /var/lib/postgresql/data
