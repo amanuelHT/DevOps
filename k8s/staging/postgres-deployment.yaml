@@ -12,12 +12,27 @@ spec:
     metadata:
       labels:
         app: postgres-staging
-    spec:                                       # ← Move spec here, not under labels
+    spec:
+      # Pod-level securityContext for restricted PodSecurity
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        fsGroup: 2000
+        seccompProfile:
+          type: RuntimeDefault
+
       containers:
         - name: postgres
           image: postgres:latest
           ports:
             - containerPort: 5432
+
+          # Container-level securityContext
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: ["ALL"]
+
           env:
             - name: POSTGRES_USER
               valueFrom:
@@ -36,10 +51,12 @@ spec:
                   key: database
             - name: PGDATA
               value: /var/lib/postgresql/data/pgdata
+
           volumeMounts:
             - name: postgres-storage
               mountPath: /var/lib/postgresql/data
-      volumes:                                  # ← Add your PVC here
+
+      volumes:
         - name: postgres-storage
           persistentVolumeClaim:
             claimName: postgres-staging-pvc
