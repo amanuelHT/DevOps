@@ -13,11 +13,24 @@ spec:
       labels:
         app: postgres-production
     spec:
+      # Pod-level securityContext to satisfy "restricted" PodSecurity
+      securityContext:
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
+
       containers:
         - name: postgres
           image: postgres:14-alpine
           ports:
             - containerPort: 5432
+
+          # Container-level securityContext
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: ["ALL"]
+
           env:
             - name: POSTGRES_USER
               valueFrom:
@@ -36,9 +49,11 @@ spec:
                   key: database
             - name: PGDATA
               value: /var/lib/postgresql/data/pgdata
+
           volumeMounts:
             - name: data
               mountPath: /var/lib/postgresql/data
+
       volumes:
         - name: data
           persistentVolumeClaim:
