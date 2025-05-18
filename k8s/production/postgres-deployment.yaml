@@ -5,54 +5,19 @@ metadata:
   namespace: production
 spec:
   replicas: 1
-
-  strategy:
-    type: RollingUpdate
-    rollingUpdate:
-      maxSurge: 0          # Avoid multi-attach by never creating >1 pod at once
-      maxUnavailable: 1
-
   selector:
     matchLabels:
       app: postgres-production
-
   template:
     metadata:
       labels:
         app: postgres-production
     spec:
-      securityContext:
-        runAsNonRoot: true
-        runAsUser: 999
-        fsGroup: 999
-        seccompProfile:
-          type: RuntimeDefault
-
-      initContainers:
-        - name: init-pgdata
-          image: busybox
-          # Run as root to mkdir & chown
-          securityContext:
-            runAsUser: 0
-          command:
-            - sh
-            - -c
-            - |
-              mkdir -p /var/lib/postgresql/data/pgdata
-              chown -R 999:999 /var/lib/postgresql/data/pgdata
-          volumeMounts:
-            - name: data
-              mountPath: /var/lib/postgresql/data
-
       containers:
         - name: postgres
           image: postgres:14-alpine
           ports:
             - containerPort: 5432
-          securityContext:
-            allowPrivilegeEscalation: false
-            capabilities:
-              drop: ["ALL"]
           env:
             - name: POSTGRES_USER
               valueFrom:
@@ -69,12 +34,9 @@ spec:
                 secretKeyRef:
                   name: db-credentials
                   key: database
-            - name: PGDATA
-              value: /var/lib/postgresql/data/pgdata
           volumeMounts:
             - name: data
-              mountPath: /var/lib/postgresql/data/pgdata
-
+              mountPath: /var/lib/postgresql/data
       volumes:
         - name: data
           persistentVolumeClaim:
