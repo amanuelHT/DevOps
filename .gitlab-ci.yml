@@ -8,8 +8,8 @@ variables:
   # Use immutable tags per commit
   IMAGE_TAG: $CI_COMMIT_SHORT_SHA
   REGISTRY: registry.internal.uia.no/ikt206-g-25v-devops/group23/exam-ikt206
-  STAGING_IMAGE: $REGISTRY/flask-example-staging:v1.2
-  PROD_IMAGE:    $REGISTRY/flask-example-production:v1.2
+  STAGING_IMAGE: $REGISTRY/flask-example-staging:v1.3
+  PROD_IMAGE:    $REGISTRY/flask-example-production:v1.3
 
 # -------- TEST STAGE --------
 test:

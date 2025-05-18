@@ -12,13 +12,12 @@ spec:
     metadata:
       labels:
         app: postgres-staging
-    spec:
-      securityContext:
-        runAsNonRoot: true
-        fsGroup: 999              # ← ensures the PVC mount is chowned to GID 999
+    spec:                                       # ← Move spec here, not under labels
       containers:
         - name: postgres
           image: postgres:latest
+          ports:
+            - containerPort: 5432
           env:
             - name: POSTGRES_USER
               valueFrom:
@@ -35,10 +34,12 @@ spec:
                 secretKeyRef:
                   name: db-credentials
                   key: database
+            - name: PGDATA
+              value: /var/lib/postgresql/data/pgdata
           volumeMounts:
             - name: postgres-storage
               mountPath: /var/lib/postgresql/data
-      volumes:
+      volumes:                                  # ← Add your PVC here
         - name: postgres-storage
           persistentVolumeClaim:
             claimName: postgres-staging-pvc
