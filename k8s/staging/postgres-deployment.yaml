@@ -16,8 +16,8 @@ spec:
       # Pod-level securityContext for restricted policy
       securityContext:
         runAsNonRoot: true
-        runAsUser: 1000
-        fsGroup: 2000
+        runAsUser: 999             # default postgres user in the image
+        fsGroup:       999         # ensure group ownership matches the data dir
         seccompProfile:
           type: RuntimeDefault
 
@@ -26,13 +26,10 @@ spec:
           image: postgres:latest
           ports:
             - containerPort: 5432
-
-          # Container-level securityContext
           securityContext:
             allowPrivilegeEscalation: false
             capabilities:
               drop: ["ALL"]
-
           env:
             - name: POSTGRES_USER
               valueFrom:
@@ -51,7 +48,6 @@ spec:
                   key: database
             - name: PGDATA
               value: /var/lib/postgresql/data/pgdata
-
           volumeMounts:
             - name: postgres-storage
               mountPath: /var/lib/postgresql/data
