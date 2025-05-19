@@ -19,18 +19,15 @@ spec:
         fsGroup: 2000
         seccompProfile:
           type: RuntimeDefault
-
       containers:
         - name: postgres
           image: postgres:14-alpine
           ports:
             - containerPort: 5432
-
           securityContext:
             allowPrivilegeEscalation: false
             capabilities:
               drop: ["ALL"]
-
           env:
             - name: POSTGRES_USER
               valueFrom:
@@ -48,13 +45,11 @@ spec:
                   name: db-credentials
                   key: database
             - name: PGDATA
-              value: /var/lib/postgresql/data
-
+              value: /var/lib/postgresql/data/pgdata
           volumeMounts:
             - name: data
               mountPath: /var/lib/postgresql/data
               subPath: pgdata
-
       volumes:
         - name: data
           persistentVolumeClaim:
