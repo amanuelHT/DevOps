@@ -25,7 +25,7 @@ spec:
           type: RuntimeDefault
       containers:
         - name: flask-example
-          image: registry.internal.uia.no/ikt206-g-25v-devops/group23/exam-ikt206/flask-example-staging:v1.6
+          image: registry.internal.uia.no/ikt206-g-25v-devops/group23/exam-ikt206/flask-example-staging:v1.7
           imagePullPolicy: Always
           ports:
             - containerPort: 5000
