@@ -47,4 +47,5 @@ RUN useradd -u 1001 -m flaskuser && chown -R flaskuser:flaskuser /app
 USER 1001
 
 EXPOSE 5000
-CMD ["gunicorn", "--bind", "0.0.0.0:5000", "app:app"]
+CMD ["gunicorn", "--bind", "0.0.0.0:5000", "--timeout", "120", "--log-level", "debug", "app:app"]
+#CMD ["gunicorn", "--bind", "0.0.0.0:5000", "app:app"]
