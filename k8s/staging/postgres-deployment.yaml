@@ -37,12 +37,11 @@ spec:
                   key: password
             - name: PGDATA
               value: /var/lib/postgresql/data/pgdata
-
           volumeMounts:
-            - mountPath: /var/lib/postgresql/data/pgdata
-              name: postgres-storage
-
-      volumes:
-        - name: postgres-storage
-          persistentVolumeClaim:
-            claimName: postgres-pvc
+            - name: postgres-storage
+              mountPath: /var/lib/postgresql/data/pgdata
+              subPath: pgdata
+          volumes:
+            - name: postgres-storage
+              persistentVolumeClaim:
+                claimName: postgres-pvc
