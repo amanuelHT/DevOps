@@ -76,39 +76,32 @@ def add_user(user_id, pw):
 
 def delete_user_from_db(user_id):
     # Delete user record
-    conn = get_connection('users')
-    cur = conn.cursor()
+    conn = get_connection('users'); cur = conn.cursor()
     if USE_POSTGRES:
         cur.execute('DELETE FROM users WHERE id = %s;', (user_id.upper(),))
     else:
         cur.execute('DELETE FROM users WHERE id = ?;', (user_id.upper(),))
-    conn.commit()
-    conn.close()
+    conn.commit(); conn.close()
 
     # Delete related notes
-    conn = get_connection('notes')
-    cur = conn.cursor()
+    conn = get_connection('notes'); cur = conn.cursor()
     if USE_POSTGRES:
         cur.execute('DELETE FROM notes WHERE user = %s;', (user_id.upper(),))
     else:
         cur.execute('DELETE FROM notes WHERE user = ?;', (user_id.upper(),))
-    conn.commit()
-    conn.close()
+    conn.commit(); conn.close()
 
     # Delete related images
-    conn = get_connection('images')
-    cur = conn.cursor()
+    conn = get_connection('images'); cur = conn.cursor()
     if USE_POSTGRES:
         cur.execute('DELETE FROM images WHERE owner = %s;', (user_id.upper(),))
     else:
         cur.execute('DELETE FROM images WHERE owner = ?;', (user_id.upper(),))
-    conn.commit()
-    conn.close()
+    conn.commit(); conn.close()
 
 
 def read_notes(user_id):
-    conn = get_connection('notes')
-    cur = conn.cursor()
+    conn = get_connection('notes'); cur = conn.cursor()
     if USE_POSTGRES:
         cur.execute(
             'SELECT note_id, timestamp, note FROM notes WHERE user = %s;', 
@@ -119,26 +112,22 @@ def read_notes(user_id):
             'SELECT note_id, timestamp, note FROM notes WHERE user = ?;', 
             (user_id.upper(),)
         )
-    rows = cur.fetchall()
-    conn.close()
+    rows = cur.fetchall(); conn.close()
     return rows
 
 
 def match_user_id_with_note_id(note_id):
-    conn = get_connection('notes')
-    cur = conn.cursor()
+    conn = get_connection('notes'); cur = conn.cursor()
     if USE_POSTGRES:
         cur.execute('SELECT user FROM notes WHERE note_id = %s;', (note_id,))
     else:
         cur.execute('SELECT user FROM notes WHERE note_id = ?;', (note_id,))
-    owner = cur.fetchone()[0]
-    conn.close()
+    owner = cur.fetchone()[0]; conn.close()
     return owner
 
 
 def write_note(user_id, note_text):
-    conn = get_connection('notes')
-    cur = conn.cursor()
+    conn = get_connection('notes'); cur = conn.cursor()
     ts = datetime.datetime.now().isoformat()
     note_id = hashlib.sha1(f"{user_id.upper()}{ts}".encode()).hexdigest()
     if USE_POSTGRES:
@@ -151,25 +140,21 @@ def write_note(user_id, note_text):
             'INSERT INTO notes VALUES (?, ?, ?, ?);',
             (user_id.upper(), ts, note_text, note_id)
         )
-    conn.commit()
-    conn.close()
+    conn.commit(); conn.close()
     return note_id
 
 
 def delete_note(note_id):
-    conn = get_connection('notes')
-    cur = conn.cursor()
+    conn = get_connection('notes'); cur = conn.cursor()
     if USE_POSTGRES:
         cur.execute('DELETE FROM notes WHERE note_id = %s;', (note_id,))
     else:
         cur.execute('DELETE FROM notes WHERE note_id = ?;', (note_id,))
-    conn.commit()
-    conn.close()
+    conn.commit(); conn.close()
 
 
 def image_upload_record(uid, owner, image_name, timestamp):
-    conn = get_connection('images')
-    cur = conn.cursor()
+    conn = get_connection('images'); cur = conn.cursor()
     if USE_POSTGRES:
         cur.execute(
             'INSERT INTO images (uid, owner, name, timestamp) VALUES (%s, %s, %s, %s);',
@@ -180,46 +165,45 @@ def image_upload_record(uid, owner, image_name, timestamp):
             'INSERT INTO images VALUES (?, ?, ?, ?);',
             (uid, owner, image_name, timestamp)
         )
-    conn.commit()
-    conn.close()
+    conn.commit(); conn.close()
 
 
 def list_images_for_user(owner):
-    # Wrapper for backward compatibility
-    conn = get_connection('images')
-    cur = conn.cursor()
+    conn = get_connection('images'); cur = conn.cursor()
     if USE_POSTGRES:
         cur.execute('SELECT uid, timestamp, name FROM images WHERE owner = %s;', (owner,))
     else:
         cur.execute('SELECT uid, timestamp, name FROM images WHERE owner = ?;', (owner,))
-    rows = cur.fetchall()
-    conn.close()
+    rows = cur.fetchall(); conn.close()
     return rows
 
 
 def match_user_id_with_image_uid(image_uid):
-    conn = get_connection('images')
-    cur = conn.cursor()
+    conn = get_connection('images'); cur = conn.cursor()
     if USE_POSTGRES:
         cur.execute('SELECT owner FROM images WHERE uid = %s;', (image_uid,))
     else:
         cur.execute('SELECT owner FROM images WHERE uid = ?;', (image_uid,))
-    owner = cur.fetchone()[0]
-    conn.close()
+    owner = cur.fetchone()[0]; conn.close()
     return owner
 
 
 def delete_image_from_db(image_uid):
-    # Wrapper for backward compatibility
-    conn = get_connection('images')
-    cur = conn.cursor()
+    conn = get_connection('images'); cur = conn.cursor()
     if USE_POSTGRES:
         cur.execute('DELETE FROM images WHERE uid = %s;', (image_uid,))
     else:
         cur.execute('DELETE FROM images WHERE uid = ?;', (image_uid,))
-    conn.commit()
-    conn.close()
+    conn.commit(); conn.close()
 
+
+# Backward compatibility aliases for note functions
+read_note_from_db   = read_notes
+write_note_into_db  = write_note
+delete_note_from_db = delete_note
+# match_user_id_with_note_id already defined
+
+# At this point, image functions are named correctly as defined above
 
 if __name__ == '__main__':
     print(list_users())
