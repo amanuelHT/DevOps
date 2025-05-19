@@ -30,15 +30,6 @@ RUN python -m compileall . \
 FROM python:3.12-slim
 WORKDIR /app
 
-# … previous COPY and RUN steps …
-
-# Install Alembic and Postgres driver
-RUN pip install --no-cache-dir alembic psycopg2-binary
-
-# Copy Alembic config and migrations
-COPY alembic.ini /app/
-COPY alembic/       /app/alembic/
-
 # Copy over installed packages and bytecode
 COPY --from=builder /usr/local/lib/python3.12/site-packages/ /usr/local/lib/python3.12/site-packages/
 COPY --from=builder /usr/local/bin/                          /usr/local/bin/
@@ -51,19 +42,9 @@ COPY --from=builder /src/static/       ./static/
 COPY --from=builder /src/templates/    ./templates/
 COPY --from=builder /src/image_pool/   ./image_pool/
 
-# Install Alembic for migrations and Postgres driver
-RUN pip install --no-cache-dir alembic psycopg2-binary
-
-# Copy in Alembic config and migration scripts
-COPY alembic.ini /app/
-COPY alembic/       /app/alembic/
-
 # Ensure non-root user owns /app
 RUN useradd -u 1001 -m flaskuser && chown -R flaskuser:flaskuser /app
 USER 1001
 
 EXPOSE 5000
-
-# On container start, apply any pending migrations, then launch Gunicorn
-CMD alembic upgrade head && \
-    gunicorn --bind 0.0.0.0:5000 app:app
+CMD ["gunicorn", "--bind", "0.0.0.0:5000", "app:app"]
