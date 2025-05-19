@@ -45,7 +45,7 @@ build:
 # -------- DEPLOY TO STAGING (manual) --------
 deploy-staging:
   stage: deploy-staging
-  when: on_success
+  when: manual
   image: bitnami/kubectl:1.27
   before_script:
     - mkdir -p ~/.kube

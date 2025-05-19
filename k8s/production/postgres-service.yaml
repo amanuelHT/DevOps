@@ -5,7 +5,7 @@ metadata:
   namespace: production
 spec:
   selector:
-    app: postgres
+    app: postgres-production
   ports:
     - port: 5432
       targetPort: 5432
