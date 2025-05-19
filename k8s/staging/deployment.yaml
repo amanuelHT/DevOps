@@ -61,6 +61,6 @@ spec:
                 name: db-credentials
                 key: database
           - name: POSTGRES_HOST
-            value: "postgres-production-postgresql"
+            value: "postgres-staging"
           - name: POSTGRES_PORT
             value: "5432"
