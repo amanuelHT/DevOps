@@ -66,6 +66,10 @@ spec:
                 secretKeyRef:
                   name: db-credentials
                   key: database
-            - name: DATABASE_URL
+        - name: POSTGRES_HOST
+          value: "postgres-staging"
+        - name: POSTGRES_PORT
+          value: "5432"
+           # - name: DATABASE_URL
               # Single-line Postgres URI ensures correct expansion
-              value: "postgresql://$(POSTGRES_USER):$(POSTGRES_PASSWORD)@postgres-staging:5432/$(POSTGRES_DB)"
+            #  value: "postgresql://$(POSTGRES_USER):$(POSTGRES_PASSWORD)@postgres-staging:5432/$(POSTGRES_DB)"
