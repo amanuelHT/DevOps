@@ -6,11 +6,18 @@ from database import list_users, verify, delete_user_from_db, add_user
 from database import read_note_from_db, write_note_into_db, delete_note_from_db, match_user_id_with_note_id
 from database import image_upload_record, list_images_for_user, match_user_id_with_image_uid, delete_image_from_db
 from werkzeug.utils import secure_filename
+from config import get_config
 
 
+POSTGRES_USER = os.getenv("POSTGRES_USER")
+POSTGRES_PASSWORD = os.getenv("POSTGRES_PASSWORD")
+POSTGRES_DB = os.getenv("POSTGRES_DB")
+POSTGRES_HOST = os.getenv("POSTGRES_HOST", "localhost")
+POSTGRES_PORT = os.getenv("POSTGRES_PORT", "5432")   
 
 app = Flask(__name__)
-app.config.from_object('config')
+#app.config.from_object('config')
+app.config.from_object(get_config())
 
 
 
