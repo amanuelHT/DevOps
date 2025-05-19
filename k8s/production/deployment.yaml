@@ -22,7 +22,7 @@ spec:
         runAsNonRoot: true
       containers:
         - name: flask-example
-          image: registry.internal.uia.no/ikt206-g-25v-devops/group23/exam-ikt206/flask-example-production:v1.6
+          image: registry.internal.uia.no/ikt206-g-25v-devops/group23/exam-ikt206/flask-example-production:v1.8
           imagePullPolicy: Always
           ports:
             - containerPort: 5000
@@ -40,27 +40,25 @@ spec:
               cpu: "500m"
               memory: "256Mi"
           env:
-           # - name: DATABASE_URL
-            #  value: postgresql://flaskuser:Admin123@postgres-production-postgresql:5432/flaskdb
-            - name: POSTGRES_USER
-              valueFrom:
-                secretKeyRef:
-                  name: db-credentials
-                  key: username
+          - name: USE_POSTGRES
+            value: "true"
+          - name: POSTGRES_USER
+            valueFrom:
+              secretKeyRef:
+                name: db-credentials
+                key: username
+          - name: POSTGRES_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: db-credentials
+                key: password
+          - name: POSTGRES_DB
+            valueFrom:
+              secretKeyRef:
+                name: db-credentials
+                key: database
+          - name: POSTGRES_HOST
+            value: "postgres-production"
+          - name: POSTGRES_PORT
+            value: "5432"
 
-            - name: POSTGRES_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: db-credentials
-                  key: password
-
-            - name: POSTGRES_DB
-              valueFrom:
-                secretKeyRef:
-                  name: db-credentials
-                  key: database
-
-            - name: DATABASE_URL
-              value: >-
-                postgresql://$(POSTGRES_USER):$(POSTGRES_PASSWORD)
-                @postgres-staging:5432/$(POSTGRES_DB)

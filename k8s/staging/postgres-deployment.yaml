@@ -7,30 +7,23 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app: postgres-staging
+      app: postgres
   template:
     metadata:
       labels:
-        app: postgres-staging
+        app: postgres
     spec:
-      # Pod-level securityContext for restricted policy
-      securityContext:
-        runAsNonRoot: true
-        runAsUser: 999             # default postgres user in the image
-        fsGroup:       999         # ensure group ownership matches the data dir
-        seccompProfile:
-          type: RuntimeDefault
-
       containers:
         - name: postgres
-          image: postgres:latest
+          image: postgres:15
           ports:
             - containerPort: 5432
-          securityContext:
-            allowPrivilegeEscalation: false
-            capabilities:
-              drop: ["ALL"]
           env:
+            - name: POSTGRES_DB
+              valueFrom:
+                secretKeyRef:
+                  name: db-credentials
+                  key: database
             - name: POSTGRES_USER
               valueFrom:
                 secretKeyRef:
@@ -41,18 +34,10 @@ spec:
                 secretKeyRef:
                   name: db-credentials
                   key: password
-            - name: POSTGRES_DB
-              valueFrom:
-                secretKeyRef:
-                  name: db-credentials
-                  key: database
-            - name: PGDATA
-              value: /var/lib/postgresql/data/pgdata
           volumeMounts:
-            - name: postgres-storage
-              mountPath: /var/lib/postgresql/data
-
+            - mountPath: /var/lib/postgresql/data
+              name: postgres-storage
       volumes:
         - name: postgres-storage
           persistentVolumeClaim:
-            claimName: postgres-staging-pvc
+            claimName: postgres-pvc

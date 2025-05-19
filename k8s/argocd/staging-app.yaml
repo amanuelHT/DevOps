@@ -12,7 +12,7 @@ spec:
     repoURL: https://gitlab.internal.uia.no/ikt206-g-25v-devops/group23/exam-ikt206.git
     targetRevision: main
     path: k8s/staging
- # syncPolicy:
-  #  automated:
-   #   prune: true
-    #  selfHeal: true
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true

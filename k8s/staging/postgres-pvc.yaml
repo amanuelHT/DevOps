@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: postgres-staging-pvc
+  name: postgres-pvc
   namespace: staging
 spec:
   accessModes:
