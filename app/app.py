@@ -144,23 +144,23 @@ def FUN_delete_image(image_uid):
 
 
 
-@app.route("/login", methods = ["POST"])
+@app.route("/login", methods=["POST"])
 def FUN_login():
-   # id_submitted = request.form.get("id").upper()
-    #if (id_submitted in list_users()) and verify(id_submitted, request.form.get("pw")):
-     #   session['current_user'] = id_submitted
-     # Read the fields your form and curl actually send:
     username = request.form.get("username")
     password = request.form.get("password")
-   # If either is missing, abort or redirect
-  if not username or not password: 
-     flash("Username and password are required.", category="danger")
-      return redirect(url_for("FUN_root"))
-  
-   user_id = username.upper()
-   if user_id in list_users() and verify(user_id, password):
-           session['current_user'] = user_id
-    return(redirect(url_for("FUN_root")))
+
+    # Ensure both fields were provided
+    if not username or not password:
+        flash("Username and password are required.", category="danger")
+        return redirect(url_for("FUN_root"))
+
+    user_id = username.upper()
+    # Only log in if the user exists and the password matches
+    if user_id in list_users() and verify(user_id, password):
+        session["current_user"] = user_id
+
+    return redirect(url_for("FUN_root"))
+
 
 @app.route("/logout/")
 def FUN_logout():
