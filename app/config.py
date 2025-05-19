@@ -20,6 +20,6 @@ else:
     # Otherwise (dev or missing vars), use SQLite
     DATABASE_URL = os.getenv("DATABASE_URL", DEFAULT_SQLITE_URL)
 
-SECRET_KEY        = os.getenv("SECRET_KEY", "fdsafasd")
-UPLOAD_FOLDER     = os.getenv("UPLOAD_FOLDER", "image_pool")
+SECRET_KEY         = os.getenv("SECRET_KEY", "fdsafasd")
+UPLOAD_FOLDER      = os.getenv("UPLOAD_FOLDER", "image_pool")
 MAX_CONTENT_LENGTH = int(os.getenv("MAX_CONTENT_LENGTH", 16 * 1024 * 1024))
