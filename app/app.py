@@ -1,8 +1,12 @@
 import os
 import datetime
 import hashlib
-from flask import Flask, session, url_for, redirect, render_template, request, abort, flash
+from flask import (
+    Flask, session, url_for, redirect,
+    render_template, request, abort, flash
+)
 from database import (
+    init_schema,
     list_users, verify, delete_user_from_db, add_user,
     read_note_from_db, write_note_into_db, delete_note_from_db, match_user_id_with_note_id,
     image_upload_record, list_images_for_user, match_user_id_with_image_uid, delete_image_from_db
@@ -11,7 +15,10 @@ from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
 app.config.from_object('config')
-app.secret_key = app.config['SECRET_KEY']  # ensure sessions and flashes work
+app.secret_key = app.config['SECRET_KEY']
+
+# Auto-create tables in Postgres if needed
+init_schema()
 
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 def allowed_file(filename):
