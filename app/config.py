@@ -5,6 +5,5 @@ class BaseConfig:
     UPLOAD_FOLDER = "image_pool"
     MAX_CONTENT_LENGTH = 16 * 1024 * 1024
 
-#def get_config():
-    #return BaseConfig
-config = BaseConfig()
+def get_config():
+    return BaseConfig()
