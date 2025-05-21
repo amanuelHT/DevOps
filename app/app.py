@@ -8,7 +8,7 @@ from database import image_upload_record, list_images_for_user, match_user_id_wi
 from werkzeug.utils import secure_filename
 from config import get_config
 from config import config
-app.config.from_object(config)
+
 
 
 
