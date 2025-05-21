@@ -7,9 +7,6 @@ from database import read_note_from_db, write_note_into_db, delete_note_from_db,
 from database import image_upload_record, list_images_for_user, match_user_id_with_image_uid, delete_image_from_db
 from werkzeug.utils import secure_filename
 from config import get_config
-from config import config
-app.config.from_object(config)
-
 
 
 

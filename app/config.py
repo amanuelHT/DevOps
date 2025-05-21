@@ -5,4 +5,5 @@ class BaseConfig:
     UPLOAD_FOLDER = "image_pool"
     MAX_CONTENT_LENGTH = 16 * 1024 * 1024
 
-config = BaseConfig()  # ✅ Now you can do `from config import config`
+def get_config():
+    return BaseConfig
