@@ -7,6 +7,9 @@ from database import read_note_from_db, write_note_into_db, delete_note_from_db,
 from database import image_upload_record, list_images_for_user, match_user_id_with_image_uid, delete_image_from_db
 from werkzeug.utils import secure_filename
 from config import get_config
+from config import config
+app.config.from_object(config)
+
 
 
 POSTGRES_USER = os.getenv("POSTGRES_USER")
@@ -159,10 +162,17 @@ def FUN_login():
     
     return(redirect(url_for("FUN_root")))
 
+
 @app.route("/logout/")
 def FUN_logout():
+    print(f"👋 Logging out {session.get('current_user')}")
     session.pop("current_user", None)
-    return(redirect(url_for("FUN_root")))
+    return redirect(url_for("FUN_root"))
+
+#@app.route("/logout/")
+#def FUN_logout():
+ #   session.pop("current_user", None)
+  #  return(redirect(url_for("FUN_root")))
 
 @app.route("/delete_user/<id>/", methods = ['GET'])
 def FUN_delete_user(id):
