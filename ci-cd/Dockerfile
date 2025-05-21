@@ -49,4 +49,5 @@ USER 1001
 EXPOSE 5000
 #CMD ["gunicorn", "--bind", "0.0.0.0:5000", "--timeout", "120", "--log-level", "debug", "app:app"]
 #CMD ["gunicorn", "--bind", "0.0.0.0:5000", "app:app"]
-CMD ["gunicorn", "--bind", "0.0.0.0:5000", "--timeout", "120", "--log-level", "debug", "--workers=2", "app:app"]
+#CMD ["gunicorn", "--bind", "0.0.0.0:5000", "--timeout", "120", "--log-level", "debug", "--workers=2", "app:app"]
+CMD ["gunicorn", "--workers", "4", "--bind", "0.0.0.0:5000", "--timeout", "120", "--log-level", "debug", "app:app"]
