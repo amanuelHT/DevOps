@@ -5,14 +5,17 @@ metadata:
   namespace: staging
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/use-regex: "true"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "120"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "120"
 spec:
-  ingressClassName: nginx  # <-- ADD THIS
+  ingressClassName: nginx
   rules:
     - host: flask.staging.local
       http:
         paths:
-          - path: /
-            pathType: Prefix
+          - path: /?(.*)
+            pathType: ImplementationSpecific
             backend:
               service:
                 name: flask-example
