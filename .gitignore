@@ -1,4 +1,4 @@
-# Python
+# Python bytecode
 __pycache__/
 *.py[cod]
 *.pyo
@@ -8,20 +8,38 @@ __pycache__/
 venv/
 app/venv/
 
-
-alembic/
-app/alembic/
-# Test coverage
+# Python coverage reports
 .coverage
 htmlcov/
+
+# Pytest cache
+.pytest_cache/
 
 # Logs
 *.log
 
-# VSCode/IDE config
+# VSCode and IDE settings
 .vscode/
 .idea/
 
-# OS files
+# OS metadata
 .DS_Store
 Thumbs.db
+
+# Helm and Kubernetes-related files (optional if generated dynamically)
+*.tgz
+*.lock
+
+# Docker
+*.tar
+
+# Build folders (if using dist/ or build/)
+dist/
+build/
+
+# Node modules (if you ever use frontend tools)
+node_modules/
+
+# Secrets (be sure you’re not leaking secrets)
+#app/secrets.yaml
+#k8s/**/secret.yaml

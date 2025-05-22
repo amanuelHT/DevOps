@@ -56,6 +56,7 @@ deploy-staging:
     - kubectl apply -f k8s/staging/namespace.yaml --validate=false
     - kubectl apply -f k8s/staging/service.yaml   --validate=false
     - kubectl apply -f k8s/staging/deployment.yaml --validate=false
+    - kubectl apply -f k8s/staging/ingress.yaml  --validate=false
   environment:
     name: staging
     url: http://$STAGING_HOST
@@ -75,6 +76,8 @@ deploy-production:
     - kubectl apply -f k8s/production/namespace.yaml --validate=false
     - kubectl apply -f k8s/production/service.yaml   --validate=false
     - kubectl apply -f k8s/production/deployment.yaml --validate=false
+    - kubectl apply -f k8s/production/ingress.yaml  --validate=false
+
   environment:
     name: production
     url: http://$PROD_HOST
