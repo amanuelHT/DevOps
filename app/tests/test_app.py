@@ -1,3 +1,4 @@
+
 import io
 
 def test_index(client):
@@ -50,4 +51,3 @@ def test_upload_image(client, test_user):
 
     response = client.post("/upload_image", data=data, content_type='multipart/form-data', follow_redirects=True)
     assert response.status_code == 200 or response.status_code == 302
-
