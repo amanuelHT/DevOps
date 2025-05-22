@@ -51,3 +51,52 @@ def test_upload_image(client, test_user):
 
     response = client.post("/upload_image", data=data, content_type='multipart/form-data', follow_redirects=True)
     assert response.status_code == 200 or response.status_code == 302
+
+
+def test_logout(client, test_user):
+    client.post("/login", data={"id": test_user[0], "pw": test_user[1]})
+    response = client.get("/logout/", follow_redirects=True)
+    assert response.status_code == 200
+    assert b"Index" in response.data or b"Public" in response.data
+
+def test_delete_note(client, test_user):
+    client.post("/login", data={"id": test_user[0], "pw": test_user[1]})
+    client.post("/write_note", data={"text_note_to_take": "To Be Deleted"}, follow_redirects=True)
+
+    # get note_id from DB (requires DB access; here we simulate it)
+    from database import read_note_from_db
+    notes = read_note_from_db(test_user[0])
+    note_id = notes[-1][0]  # get latest note's id
+
+    response = client.get(f"/delete_note/{note_id}", follow_redirects=True)
+    assert response.status_code == 200
+
+def test_delete_image(client, test_user):
+    client.post("/login", data={"id": test_user[0], "pw": test_user[1]})
+    dummy_image = (io.BytesIO(b"fake-image-data"), "test.jpg")
+    data = {"file": dummy_image}
+    client.post("/upload_image", data=data, content_type='multipart/form-data', follow_redirects=True)
+
+    # get image UID from DB
+    from database import list_images_for_user
+    images = list_images_for_user(test_user[0])
+    uid = images[-1][0]
+
+    response = client.get(f"/delete_image/{uid}", follow_redirects=True)
+    assert response.status_code == 200
+
+def test_delete_user_as_admin(client, admin_user):
+    from database import add_user
+    add_user("DELETEUSER", "pass")
+
+    client.post("/login", data={"id": admin_user[0], "pw": admin_user[1]})
+    response = client.get("/delete_user/DELETEUSER/", follow_redirects=True)
+    assert response.status_code == 200
+
+def test_delete_user_unauthorized(client, test_user):
+    from database import add_user
+    add_user("SHOULDNOTDELETE", "pass")
+
+    client.post("/login", data={"id": test_user[0], "pw": test_user[1]})
+    response = client.get("/delete_user/SHOULDNOTDELETE/", follow_redirects=True)
+    assert response.status_code in [401, 403]
