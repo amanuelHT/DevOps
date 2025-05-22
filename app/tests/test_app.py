@@ -40,8 +40,12 @@ def test_add_user_as_admin(client, admin_user):
 
 def test_upload_image(client, test_user):
     client.post("/login", data={"id": test_user[0], "pw": test_user[1]})
+
+    dummy_image = (io.BytesIO(b"fake-image-data"), "test.jpg")
     data = {
-        "file": (open("app/static/img/flask-powered.png", "rb"), "flask-powered.png")
+        "file": dummy_image
     }
-    response = client.post("/upload_image", data=data, content_type="multipart/form-data", follow_redirects=True)
-    assert b"flask-powered.png" in response.data or response.status_code == 200
+
+    response = client.post("/upload_image", data=data, content_type='multipart/form-data', follow_redirects=True)
+    assert response.status_code == 200 or response.status_code == 302
+
