@@ -6,7 +6,7 @@ import os
 sys.path.insert(0, os.path.abspath(os.path.dirname(__file__) + "/.."))
 
 from app import app as flask_app
-from database import add_user
+from database import add_user, delete_user_from_db
 
 @pytest.fixture
 def client():
@@ -16,10 +16,18 @@ def client():
 
 @pytest.fixture(scope="function")
 def test_user():
-    add_user("TESTUSER", "test123")
-    return "TESTUSER", "test123"
+    user_id = "TESTUSER"
+    password = "test123"
+    delete_user_from_db(user_id)  # Clean slate
+    add_user(user_id, password)
+    yield user_id, password
+    delete_user_from_db(user_id)  # Cleanup
 
 @pytest.fixture(scope="function")
 def admin_user():
-    add_user("ADMIN", "admin")
-    return "ADMIN", "admin"
+    user_id = "ADMIN"
+    password = "admin"
+    delete_user_from_db(user_id)
+    add_user(user_id, password)
+    yield user_id, password
+    delete_user_from_db(user_id)

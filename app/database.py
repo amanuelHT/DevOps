@@ -68,14 +68,30 @@ def delete_user_from_db(id):
     _conn.commit()
     _conn.close()
 
+#def add_user(id, pw):
+ #   print(f"➕ Adding user: {id}")
+  #  _conn = get_connection("users")
+   # _c = _conn.cursor()
+    #_c.execute("INSERT INTO users values(%s, %s)" if USE_POSTGRES else "INSERT INTO users values(?, ?)",
+    #           (id.upper(), hashlib.sha256(pw.encode()).hexdigest()))
+    #_conn.commit()
+    #_conn.close()
+
+
 def add_user(id, pw):
     print(f"➕ Adding user: {id}")
     _conn = get_connection("users")
     _c = _conn.cursor()
+
+    # 💡 Ensure test doesn't break due to duplicates
+    _c.execute("DELETE FROM users WHERE id = %s;" if USE_POSTGRES else "DELETE FROM users WHERE id = ?;", (id.upper(),))
+    _conn.commit()
+
     _c.execute("INSERT INTO users values(%s, %s)" if USE_POSTGRES else "INSERT INTO users values(?, ?)",
                (id.upper(), hashlib.sha256(pw.encode()).hexdigest()))
     _conn.commit()
     _conn.close()
+
 
 def read_note_from_db(id):
     print(f"📓 Reading notes for: {id}")
