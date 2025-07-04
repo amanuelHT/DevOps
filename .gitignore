@@ -43,3 +43,4 @@ node_modules/
 # Secrets (be sure you’re not leaking secrets)
 #app/secrets.yaml
 #k8s/**/secret.yaml
+kubeconfig
