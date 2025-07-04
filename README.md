@@ -1,4 +1,4 @@
-# DevOps Project – Auby & Brinch Finance
+# DevOps Project
 
 This repository contains a complete DevOps setup for deploying a Python Flask application using modern DevOps practices.
 
