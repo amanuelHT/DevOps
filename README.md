@@ -81,25 +81,6 @@ To design and implement a **scalable, automated, and reliable DevOps workflow** 
 - Full system visibility  
 
 ---
-## Architecture Overview
-
-
-Feature Branch
-↓
-GitLab CI/CD
-├── Test (pytest + coverage)
-├── Build (Kaniko)
-└── Push image to registry
-↓
-Kubernetes
-├── Staging
-└── Production
-↓
-ArgoCD (GitOps)
-↓
-Grafana + Prometheus
-
----
 
 ## Tech Stack
 
@@ -141,7 +122,7 @@ ArgoCD ensures Kubernetes is always in sync with Git.
 
 Automated testing with pytest and coverage integrated into CI/CD.
 
-![TestCoverage](docs/Test coverage.png)
+![Test Coverage](docs/Testcoverage.png)
 
 ---
 
