@@ -125,7 +125,6 @@ Grafana + Prometheus
 
 ---
 
-## 📸 CI/CD Pipeline
 
 This pipeline shows automated testing, image build, and controlled deployment.
 
@@ -133,7 +132,6 @@ This pipeline shows automated testing, image build, and controlled deployment.
 
 ---
 
-## 📸 GitOps Deployment (ArgoCD)
 
 ArgoCD ensures Kubernetes is always in sync with Git.
 
@@ -141,11 +139,9 @@ ArgoCD ensures Kubernetes is always in sync with Git.
 
 ---
 
-## 📸 Test Coverage
-
 Automated testing with pytest and coverage integrated into CI/CD.
 
-![Test Coverage](docs/Test coverage.png)
+![TestCoverage](docs/Test coverage.png)
 
 ---
 
